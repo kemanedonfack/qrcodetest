@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-cors-deployment
+spec:
+  selector:
+    matchLabels:
+      app: test-cors
+  template:
+    metadata:
+      labels:
+        app: test-cors
+    spec:
+      containers:
+      - name: test-cors-container
+        image: $BUILT_IMAGE
+        ports:
+        - containerPort: 80
+        resources:
+            limits:
+              cpu: "200m" 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-cors-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: test-cors
